@@ -34,6 +34,18 @@
   <script src="{{ baseHref }}javascripts/jquery-2.1.4.min.js"></script>
   <script src="{{ baseHref }}javascripts/bootstrap.min.js"></script>
 
+  <script src="{{ baseHref }}javascripts/jquery.wrapRegExp.js"></script>
+  <script>
+    $(function() {
+      'use strict';
+
+      $('tbody .tableContent').wrapRegExp({
+        regExp: /([a-z0-9]{24},)/g,
+        wrapper: '<div />'
+      });
+    });
+  </script>
+
   {% block head %}{% endblock %}
 </head>
 
