@@ -23,7 +23,7 @@ if (process.env.VCAP_SERVICES) {
     password: 'pass',
     port:     27017,
     ssl:      false,
-    url:      '"mongodb://localhost:27017/db',
+    url:      'mongodb://localhost:27017/db',
     username: 'admin',
   };
 }
@@ -45,19 +45,19 @@ module.exports = {
     //set admin to true if you want to turn on admin features
     //if admin is true, the auth list below will be ignored
     //if admin is true, you will need to enter an admin username/password below (if it is needed)
-    admin: !!process.env.ME_CONFIG_MONGODB_ENABLE_ADMIN || false,
+    admin: process.env.ME_CONFIG_MONGODB_ENABLE_ADMIN ? process.env.ME_CONFIG_MONGODB_ENABLE_ADMIN.toLowerCase() === 'true' : false,
 
     // >>>>  If you are using regular accounts, fill out auth details in the section below
     // >>>>  If you have admin auth, leave this section empty and skip to the next section
     auth: [
       /*
-       * Add the the name, the username, and the password of the databases you want to connect to
+       * Add the name, username, and password of the databases you want to connect to
        * Add as many databases as you want!
        */
        {
-         database: mongo.db,
-         username: mongo.username,
-         password: mongo.password,
+         database: process.env.ME_CONFIG_MONGODB_AUTH_DATABASE || mongo.db,
+         username: process.env.ME_CONFIG_MONGODB_AUTH_USERNAME || mongo.username,
+         password: process.env.ME_CONFIG_MONGODB_AUTH_PASSWORD || mongo.password,
        },
       ],
 
@@ -77,7 +77,7 @@ module.exports = {
 
   site: {
     // baseUrl: the URL that mongo express will be located at - Remember to add the forward slash at the stard and end!
-    baseUrl: '/',
+    baseUrl: process.env.ME_CONFIG_SITE_BASEURL || '/',
     cookieKeyName: 'mongo-express',
     cookieSecret:     process.env.ME_CONFIG_SITE_COOKIESECRET   || 'cookiesecret',
     host:             process.env.VCAP_APP_HOST                 || 'localhost',
@@ -125,6 +125,13 @@ module.exports = {
 
     //readOnly: if readOnly is true, components of writing are not visible.
     readOnly: false,
+
+    //collapsibleJSON: if set to true, jsons will be displayed collapsible
+    collapsibleJSON: true,
+
+    //collapsibleJSONDefaultUnfold: if collapsibleJSON is set to `true`, this defines default level
+    //  to which JSONs are displayed unfolded; use number or "all" to unfold all levels
+    collapsibleJSONDefaultUnfold: 1,
   },
 
   // Specify the default keyname that should be picked from a document to display in collections list.
